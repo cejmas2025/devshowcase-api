@@ -36,9 +36,31 @@ public class TechnologyController {
     @PostMapping
     public Technology create(@Valid @RequestBody TechnologyDTO dto) {
         Technology technology = new Technology();
-
         technology.setName(dto.getName());
-
         return repository.save(technology);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Technology> update(
+            @PathVariable Long id,
+            @Valid @RequestBody TechnologyDTO dto) {
+
+        return repository.findById(id)
+                .map(technology -> {
+                    technology.setName(dto.getName());
+                    Technology updated = repository.save(technology);
+                    return ResponseEntity.ok(updated);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return repository.findById(id)
+                .map(technology -> {
+                    repository.delete(technology);
+                    return ResponseEntity.noContent().<Void>build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }

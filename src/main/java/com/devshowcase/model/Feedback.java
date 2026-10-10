@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Feedback {
@@ -17,7 +18,8 @@ public class Feedback {
     private String comment;
 
     @ManyToOne
-    private Project project;
+@JsonIgnore
+private Project project;
 
     public Feedback() {
     }
